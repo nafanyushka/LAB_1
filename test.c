@@ -14,6 +14,8 @@ int* array_OTBOR_middlen(int*, int*, int*);
 int* array_OTBOR_midlenum(int*, int*, int*);
 void freematrix(int**, int*);
 int* array_OTBOR_3len(int*, int*, int*);
+void newisold(int** NEW, int **OLD, int *new_sizes, int *old_sizes, int);
+void otbor(int** NEW, int** M, int* sizes, int* new_sizes, int STRINGS, int swit);
 
 int main(){
 
@@ -45,11 +47,41 @@ int main(){
         NEW = matrix_OTBOR(M, sizes, &STRINGS, new_sizes, swit);
         printf("\n");
         outputmatrix(NEW, new_sizes, &STRINGS);
-        //CLEAR MEMORY
+        printf("Do you want to  make new matrix main?\n1 - YES, 2 - NO.\n");
+        int P = 0;
+
+        //NEW STRING = OLD STRING
+
+        while(P < 1 || P > 2){
+            P = input();
+        }
+        if(P == 1){
+            while(P == 1){
+                newisold(NEW, M, new_sizes, sizes, STRINGS);
+                printf("\tTime to OTBOR!\nPlease, input:\n\t1 - OTBOR by middle len.\n\t2 - OTBOR by middle number.\n\t3 - OTBOR only 3-len numbers.\n");
+                swit = 0;
+                while (swit < 1 || swit > 3) {
+                    printf("Choose your variant: ");
+                    swit = input();
+                }
+                printf("Your OTBOR matrix:\n");
+                NEW = matrix_OTBOR(M, sizes, &STRINGS, new_sizes, swit);
+                printf("\n");
+                outputmatrix(NEW, new_sizes, &STRINGS);
+                printf("Do you want to  make new matrix main?\n1 - YES, 2 - NO.\n");
+//                otbor(NEW, M, sizes, new_sizes, STRINGS, swit);
+                P = input();
+            }
+        }
+        else{
         freematrix(M, &STRINGS);
         freematrix(NEW, &STRINGS);
         free(sizes);
         free(new_sizes);
+        }
+        //NEW STRING = OLD STRING
+
+        //CLEAR MEMORY
         printf("Try again? Enter 1 if you want to exit: ");
         int restart = input();
         if (restart == 1) {
@@ -62,6 +94,7 @@ int main(){
                 system("cls");
         }
     }
+    system("pause");
     return 0;
 
 }
@@ -226,4 +259,31 @@ int* array_OTBOR_3len(int* A, int* N, int* p){
     *p = n;
     B = (int*)realloc(B, n * sizeof(int));
     return B;
+}
+
+void newisold(int** NEW, int **OLD, int *new_sizes, int *old_sizes, int N){
+//    freematrix(OLD, old_sizes);
+//    free(old_sizes);
+    for(int i = 0; i < N; i++, OLD++, NEW++){
+        *OLD = *NEW;
+        *NEW = NULL;
+        old_sizes[i] = new_sizes[i];
+    }
+    OLD -= N;
+    NEW -= N;
+    NEW = NULL;
+}
+
+void otbor(int** NEW, int** M, int* sizes, int* new_sizes, int STRINGS, int swit){
+    printf("\tTime to OTBOR!\nPlease, input:\n\t1 - OTBOR by middle len.\n\t2 - OTBOR by middle number.\n\t3 - OTBOR only 3-len numbers.\n");
+    swit = 0;
+    while (swit < 1 || swit > 3) {
+        printf("Choose your variant: ");
+        swit = input();
+    }
+    printf("Your OTBOR matrix:\n");
+    NEW = matrix_OTBOR(M, sizes, &STRINGS, new_sizes, swit);
+    printf("\n");
+    outputmatrix(NEW, new_sizes, &STRINGS);
+    printf("Do you want to  make new matrix main?\n1 - YES, 2 - NO.\n");
 }
